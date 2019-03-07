@@ -27,3 +27,18 @@ To run the scripts:
 - `tidyverse` package (optional)
 
 More information about running these calculations in R can be found [here](https://stats.idre.ucla.edu/r/dae/power-analysis-for-two-group-independent-sample-t-test/).
+
+# Authors
+
+Code:
+
+- Kjell Brunnström
+- Werner Robitza
+
+Concept and related material:
+
+- Marcus Barkowsky
+- Kjell Brunnström
+- Gunnar Heikkilä
+- David Lindero
+- Werner Robitza

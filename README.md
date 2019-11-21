@@ -1,4 +1,4 @@
-# Calculations for Number of Subjects
+# VQEGNumSubjTool — Calculations for Number of Subjects
 
 This repository hosts scripts and data for estimating the required number of test subjects for typical Quality of Experience experiments.
 

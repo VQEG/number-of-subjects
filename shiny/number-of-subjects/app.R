@@ -13,7 +13,7 @@ library(shiny)
 ui <- fluidPage(
    
    # Application title
-   titlePanel("Number of Subjects Calculations"),
+   titlePanel("VQEGNumSubjTool — Number of Subjects Calculations"),
    
    # Sidebar with a slider input for number of bins 
    sidebarLayout(
@@ -56,6 +56,8 @@ ui <- fluidPage(
         tags$h4("About"),
         tags$p("Written by: Werner Robitza with calculations from the R `pwr` package"),
         tags$p("Based on the paper: Brunnström, K. and M. Barkowsky, Statistical quality of experience analysis: on planning the sample size and statistical significance testing. Journal of Electronic Imaging, 2018. 27(5): p. 11, DOI: 10.1117/1.JEI.27.5.053013"),
+        tags$p("Copyright (c) Kjell Brunnström, Werner Robitza"),
+        tags$p("License: MIT"),
         tags$p(tags$a(href="https://github.com/VQEG/number-of-subjects", "More info about this app…"))
       )
    )

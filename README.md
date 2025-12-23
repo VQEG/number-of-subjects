@@ -1,6 +1,6 @@
 # VQEGNumSubjTool — Calculations for Number of Subjects
 
-This repository hosts scripts and data for estimating the required number of test subjects for typical Quality of Experience experiments.
+This repository hosts scripts and a web tool for estimating the required number of test subjects for typical Quality of Experience experiments.
 
 The calculations are based on knowing:
 
@@ -14,19 +14,47 @@ The result is the minimum number of subjects needed for the experiment in order 
 
 ## Interactive App
 
-The calculations can be done interactively with a Shiny app here:
+The calculations can be done interactively here:
 
-https://slhck.shinyapps.io/number-of-subjects/
+**https://vqeg.github.io/number-of-subjects/**
 
-## Requirements
+### Legacy Shiny App
 
-To run the scripts:
+A legacy version of this tool is available as an R Shiny app at https://slhck.shinyapps.io/number-of-subjects/. The source code is in the [`shiny/`](shiny/) directory. It uses R underneath.
+
+## R Scripts
+
+The R scripts used for the original calculations can be found in the [`scriptRs/`](scripts/R) directory. They require:
 
 - R
 - `pwr` package
 - `tidyverse` package (optional)
 
 More information about running these calculations in R can be found [here](https://stats.idre.ucla.edu/r/dae/power-analysis-for-two-group-independent-sample-t-test/).
+
+## Python
+
+A Python version of the calculations is available in [`scripts/python/power_analysis.py`](scripts/python/power_analysis.py). It uses [uv](https://docs.astral.sh/uv/) inline script dependencies, so no manual installation is required.
+
+```bash
+# Run with defaults (stdev=0.8, MOS diff=1.0, 100 comparisons)
+uv run scripts/python/power_analysis.py
+
+# Custom parameters
+uv run scripts/python/power_analysis.py --stdev 1.0 --mos-diff 0.5 --comparisons 1000
+
+# Independent (two-sample) t-test instead of paired
+uv run scripts/python/power_analysis.py --test-type independent
+
+# Generate sample size tables (replicates R script output)
+uv run scripts/python/power_analysis.py --table
+
+# Interactive mode
+uv run scripts/python/power_analysis.py --interactive
+
+# JSON output for programmatic use
+uv run scripts/python/power_analysis.py --json
+```
 
 ## Background
 
@@ -54,8 +82,7 @@ The number of test subjects needed for a particular experiment is highly depende
 - [4] Benjamini, Y. and D. Yekutieli, The Control of the False Discovery Rate in Multiple Testing under Dependency. The Annals of Statistics, 2001. 29(4): p. 1165-1188.
 - [5] Benjamini, Y. and Y. Hochberg, Controlling the False Discovery Rate: A Practical and Powerful Approach to Multiple Testing. Journal of the Royal Statistical Society. Series B (Methodological), 1995. 57(1): p. 289-300.
 
-
-# Authors
+## Authors
 
 Code:
 
@@ -70,7 +97,7 @@ Concept and related material:
 - David Lindero
 - Werner Robitza
 
-# License
+## License
 
 Copyright (c) 2019 Kjell Brunnström, Werner Robitza
 

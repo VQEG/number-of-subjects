@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VQEGNumSubjTool — Number of Subjects Calculator</title>
+    <script src="https://cdn.jsdelivr.net/npm/jstat@latest/dist/jstat.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #fff;
+            color: #111;
+            min-height: 100vh;
+            line-height: 1.5;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        header {
+            margin-bottom: 3rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #666;
+            margin-bottom: 0.75rem;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+        }
+
+        @media (max-width: 700px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .section-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #999;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.75rem;
+        }
+
+        .input-hint {
+            font-size: 0.75rem;
+            color: #999;
+            margin-top: 0.4rem;
+            line-height: 1.4;
+        }
+
+        .input-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .input-label span:first-child {
+            color: #555;
+        }
+
+        .input-value {
+            font-variant-numeric: tabular-nums;
+            color: #111;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 4px;
+            background: #ddd;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #111;
+            border-radius: 50%;
+            cursor: grab;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #111;
+            border: none;
+            border-radius: 50%;
+            cursor: grab;
+        }
+
+        .toggle-group {
+            display: flex;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .toggle-option {
+            flex: 1;
+            padding: 0.6rem 1rem;
+            background: transparent;
+            border: none;
+            font-family: inherit;
+            font-size: 0.8rem;
+            color: #999;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .toggle-option:not(:last-child) {
+            border-right: 1px solid #ddd;
+        }
+
+        .toggle-option:hover {
+            color: #555;
+        }
+
+        .toggle-option.active {
+            background: #111;
+            color: #fff;
+        }
+
+        .result-box {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .result-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #888;
+            margin-bottom: 0.5rem;
+        }
+
+        .result-number {
+            font-size: 4rem;
+            font-weight: 300;
+            line-height: 1;
+            margin-bottom: 0.25rem;
+        }
+
+        .result-unit {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .stat-item {
+            padding: 1rem;
+            background: #f5f5f5;
+            border: 1px solid #eee;
+            border-radius: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #888;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-value {
+            font-size: 1rem;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .info-section {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #ddd;
+        }
+
+        .info-section h2 {
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .info-section p {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.75rem;
+        }
+
+        .info-section a {
+            color: #111;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+
+        .info-section a:hover {
+            color: #666;
+        }
+
+        .formula {
+            background: #f5f5f5;
+            border-left: 2px solid #ccc;
+            padding: 0.75rem 1rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+            font-size: 0.8rem;
+            margin: 1rem 0;
+            color: #333;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="tag">VQEG Research Tool</div>
+            <h1>Number of Subjects Calculator</h1>
+            <p class="subtitle">Estimate subjects needed for QoE experiments using power analysis with Bonferroni correction.</p>
+        </header>
+
+        <div class="main-grid">
+            <div class="inputs-panel">
+                <div class="section-title">Parameters</div>
+
+                <div class="input-group">
+                    <div class="input-label">
+                        <span>Expected Standard Deviation</span>
+                        <span class="input-value" id="stdev-value">0.8</span>
+                    </div>
+                    <input type="range" id="stdev" min="0.1" max="2" step="0.1" value="0.8">
+                    <div class="input-hint">Expected spread of ratings across subjects. Typical values: 0.8–1.0 for ACR scales.</div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-label">
+                        <span>Desired MOS Difference</span>
+                        <span class="input-value" id="mosdiff-value">1.0</span>
+                    </div>
+                    <input type="range" id="mosdiff" min="0.1" max="5" step="0.1" value="1">
+                    <div class="input-hint">Minimum MOS difference you want to detect. E.g., 1.0 = one quality level on a 5-point ACR scale.</div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-label">
+                        <span>Number of Comparisons</span>
+                        <span class="input-value" id="numcomp-value">100</span>
+                    </div>
+                    <input type="range" id="numcomp" min="1" max="5000" step="1" value="100">
+                    <div class="input-hint">Number of t-test comparisons planned. Used for Bonferroni correction to control Type I errors.</div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-label">
+                        <span>Desired Power</span>
+                        <span class="input-value" id="power-value">0.80</span>
+                    </div>
+                    <input type="range" id="power" min="0.5" max="0.99" step="0.01" value="0.8">
+                    <div class="input-hint">Probability of detecting a true effect (1 − Type II error). Typically 0.80.</div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-label">
+                        <span>Type of Test</span>
+                    </div>
+                    <div class="toggle-group">
+                        <button class="toggle-option active" data-value="paired">Paired</button>
+                        <button class="toggle-option" data-value="two.sample">Independent</button>
+                    </div>
+                    <div class="input-hint">Paired: same subjects rate both conditions. Independent: different subject groups.</div>
+                </div>
+            </div>
+
+            <div class="results-panel">
+                <div class="section-title">Results</div>
+
+                <div class="result-box">
+                    <div class="result-label">Minimum Subjects Required</div>
+                    <div class="result-number" id="result-subjects">--</div>
+                    <div class="result-unit">subjects</div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">Effect Size (d)</div>
+                        <div class="stat-value" id="effect-size">--</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Adjusted Alpha</div>
+                        <div class="stat-value" id="adjusted-alpha">--</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Base Alpha</div>
+                        <div class="stat-value">0.05</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Correction</div>
+                        <div class="stat-value">Bonferroni</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h2>About</h2>
+            <p>Written by: Werner Robitza</p>
+            <p>
+                Based on the paper: Brunnström, K. and M. Barkowsky, Statistical quality of experience analysis:
+                on planning the sample size and statistical significance testing. <em>Journal of Electronic Imaging</em>,
+                2018. 27(5): p. 11, DOI: <a href="https://doi.org/10.1117/1.JEI.27.5.053013">10.1117/1.JEI.27.5.053013</a>
+            </p>
+            <p>Copyright (c) Kjell Brunnström, Werner Robitza</p>
+            <p>License: MIT</p>
+            <p>
+                <a href="https://github.com/VQEG/number-of-subjects">More info about this app…</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Power analysis using jStat for accurate non-central t-distribution
+
+        function calculatePower(n, d, alpha, type) {
+            let df, ncp;
+
+            if (type === 'paired') {
+                df = n - 1;
+                ncp = d * Math.sqrt(n);
+            } else {
+                df = 2 * n - 2;
+                ncp = d * Math.sqrt(n / 2);
+            }
+
+            // Critical value for two-tailed test
+            const tCrit = jStat.studentt.inv(1 - alpha / 2, df);
+
+            // Power using non-central t-distribution
+            // P(reject H0 | H1 true) = P(T > tCrit) + P(T < -tCrit) where T ~ nct(df, ncp)
+            const powerUpper = 1 - jStat.noncentralt.cdf(tCrit, df, ncp);
+            const powerLower = jStat.noncentralt.cdf(-tCrit, df, ncp);
+
+            return powerUpper + powerLower;
+        }
+
+        function calculateSampleSize(d, alpha, targetPower, type) {
+            // Binary search for required n
+            let lo = 2;
+            let hi = 10000;
+
+            while (hi - lo > 1) {
+                const mid = Math.floor((lo + hi) / 2);
+                const power = calculatePower(mid, d, alpha, type);
+
+                if (power < targetPower) {
+                    lo = mid;
+                } else {
+                    hi = mid;
+                }
+            }
+
+            return hi;
+        }
+
+        // UI
+        const inputs = {
+            stdev: document.getElementById('stdev'),
+            mosdiff: document.getElementById('mosdiff'),
+            numcomp: document.getElementById('numcomp'),
+            power: document.getElementById('power')
+        };
+
+        const displays = {
+            stdev: document.getElementById('stdev-value'),
+            mosdiff: document.getElementById('mosdiff-value'),
+            numcomp: document.getElementById('numcomp-value'),
+            power: document.getElementById('power-value'),
+            result: document.getElementById('result-subjects'),
+            effectSize: document.getElementById('effect-size'),
+            adjustedAlpha: document.getElementById('adjusted-alpha')
+        };
+
+        const toggleButtons = document.querySelectorAll('.toggle-option');
+        let testType = 'paired';
+
+        function formatAlpha(num) {
+            if (num >= 0.0001) return num.toFixed(6);
+            return num.toExponential(2);
+        }
+
+        function update() {
+            const stdev = parseFloat(inputs.stdev.value);
+            const mosdiff = parseFloat(inputs.mosdiff.value);
+            const numcomp = parseInt(inputs.numcomp.value);
+            const power = parseFloat(inputs.power.value);
+
+            displays.stdev.textContent = stdev.toFixed(1);
+            displays.mosdiff.textContent = mosdiff.toFixed(1);
+            displays.numcomp.textContent = numcomp.toLocaleString();
+            displays.power.textContent = power.toFixed(2);
+
+            const effectSize = mosdiff / stdev;
+            const adjustedAlpha = 0.05 / numcomp;
+
+            displays.effectSize.textContent = effectSize.toFixed(2);
+            displays.adjustedAlpha.textContent = formatAlpha(adjustedAlpha);
+
+            const n = calculateSampleSize(effectSize, adjustedAlpha, power, testType);
+            displays.result.textContent = n;
+        }
+
+        Object.values(inputs).forEach(input => {
+            input.addEventListener('input', update);
+        });
+
+        toggleButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                toggleButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                testType = btn.dataset.value;
+                update();
+            });
+        });
+
+        update();
+    </script>
+</body>
+</html>
